@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weryfikacja - JustAndrew CAPTCHA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .captcha-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .img-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        #captcha-img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 280px;
+            object-fit: cover;
+            cursor: crosshair;
+        }
+
+        #selection-box {
+            position: absolute;
+            border: 2px solid #0056b3;
+            background: rgba(0, 86, 179, 0.2);
+            pointer-events: none;
+            display: none;
+        }
+
+        .footer-note {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Widok po ukończeniu weryfikacji */
+        .success-view {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="captcha-container" id="captcha-view">
+    <h2>Zabezpieczenie przed botami</h2>
+    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>JustAndrew</strong>, a następnie kliknij przycisk.</p>
+
+    <div class="img-wrapper" id="img-wrapper">
+        <img id="captcha-img" src="andrew1.jpg" alt="Obrazek weryfikacyjny" onclick="handleImageClick(event)">
+        <div id="selection-box"></div>
+    </div>
+
+    <br>
+    <button class="btn" onclick="verifySelection()">Zweryfikuj</button>
+    
+    <div class="footer-note">Weryfikacja CAPTCHA Powered by JustAndrew</div>
+</div>
+
+<div class="captcha-container success-view" id="success-view">
+    <h2>Weryfikacja zakończona sukcesem!</h2>
+    <p>Dziękujemy, oto właściwy widok:</p>
+    
+    <div class="img-wrapper">
+        <img src="andrew2.jpg" alt="Drugi etap" style="width: 100%; max-height: 280px; object-fit: cover;">
+    </div>
+    
+    <button class="btn" onclick="resetCaptcha()">Zresetuj</button>
+</div>
+
+<script>
+    let clickConfirmed = false;
+
+    // Funkcja sprawdza, czy użytkownik kliknął w odpowiednim miejscu (na twarz)
+    function handleImageClick(event) {
+        const img = document.getElementById('captcha-img');
+        const rect = img.getBoundingClientRect();
+        
+        // Obliczanie współrzędnych kliknięcia (w procentach)
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        // Pokaż prostokąt zaznaczenia
+        const selection = document.getElementById('selection-box');
+        selection.style.left = (x - 25) + 'px';
+        selection.style.top = (y - 25) + 'px';
+        selection.style.width = '50px';
+        selection.style.height = '50px';
+        selection.style.display = 'block';
+
+        // Szacunkowy obszar twarzy na pierwszym zdjęciu to około 30-40% szerokości / 60-75% wysokości
+        const percentageX = (x / rect.width) * 100;
+        const percentageY = (y / rect.height) * 100;
+
+        // Przykład: uznajemy trafienie, jeśli użytkownik kliknie w okolice twarzy (np. w zakresie 35-45% X, 60-70% Y)
+        if (percentageX >= 30 && percentageX <= 48 && percentageY >= 58 && percentageY <= 75) {
+            clickConfirmed = true;
+        } else {
+            clickConfirmed = false;
+        }
+    }
+
+    function verifySelection() {
+        if (clickConfirmed) {
+            document.getElementById('captcha-view').style.display = 'none';
+            document.getElementById('success-view').style.display = 'block';
+        } else {
+            alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
+            resetSelection();
+        }
+    }
+
+    function resetSelection() {
+        document.getElementById('selection-box').style.display = 'none';
+        clickConfirmed = false;
+    }
+
+    function resetCaptcha() {
+        document.getElementById('success-view').style.display = 'none';
+        document.getElementById('captcha-view').style.display = 'block';
+        resetSelection();
+    }
+</script>
+
+</body>
+</html>
