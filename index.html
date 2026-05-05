@@ -41,14 +41,14 @@
             border: 2px solid #ddd;
             border-radius: 6px;
             overflow: hidden;
+            width: 350px;
+            height: 250px;
         }
 
-        #captcha-img {
-            display: block;
+        #captcha-img, .success-view img {
             width: 100%;
-            height: auto;
-            max-height: 280px;
-            object-fit: cover;
+            height: 100%;
+            object-fit: contain;
             cursor: crosshair;
         }
 
@@ -82,7 +82,6 @@
             background-color: #0056b3;
         }
 
-        /* Widok po ukończeniu weryfikacji */
         .success-view {
             display: none;
         }
@@ -95,7 +94,7 @@
     <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>JustAndrew</strong>, a następnie kliknij przycisk.</p>
 
     <div class="img-wrapper" id="img-wrapper">
-        <img id="captcha-img" src="andrew1.jpg" alt="Obrazek weryfikacyjny" onclick="handleImageClick(event)">
+        <img id="captcha-img" src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Obrazek weryfikacyjny" onclick="handleImageClick(event)">
         <div id="selection-box"></div>
     </div>
 
@@ -110,7 +109,7 @@
     <p>Dziękujemy, oto właściwy widok:</p>
     
     <div class="img-wrapper">
-        <img src="andrew2.jpg" alt="Drugi etap" style="width: 100%; max-height: 280px; object-fit: cover;">
+        <img src="https://i.ibb.co/C0V4q0q/andrew2.jpg" alt="Drugi etap">
     </div>
     
     <button class="btn" onclick="resetCaptcha()">Zresetuj</button>
@@ -119,16 +118,13 @@
 <script>
     let clickConfirmed = false;
 
-    // Funkcja sprawdza, czy użytkownik kliknął w odpowiednim miejscu (na twarz)
     function handleImageClick(event) {
         const img = document.getElementById('captcha-img');
         const rect = img.getBoundingClientRect();
         
-        // Obliczanie współrzędnych kliknięcia (w procentach)
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         
-        // Pokaż prostokąt zaznaczenia
         const selection = document.getElementById('selection-box');
         selection.style.left = (x - 25) + 'px';
         selection.style.top = (y - 25) + 'px';
@@ -136,11 +132,10 @@
         selection.style.height = '50px';
         selection.style.display = 'block';
 
-        // Szacunkowy obszar twarzy na pierwszym zdjęciu to około 30-40% szerokości / 60-75% wysokości
         const percentageX = (x / rect.width) * 100;
         const percentageY = (y / rect.height) * 100;
 
-        // Przykład: uznajemy trafienie, jeśli użytkownik kliknie w okolice twarzy (np. w zakresie 35-45% X, 60-70% Y)
+        // Obszar na którym znajduje się postać (głowa) na zdjęciu 1
         if (percentageX >= 30 && percentageX <= 48 && percentageY >= 58 && percentageY <= 75) {
             clickConfirmed = true;
         } else {
