@@ -34,67 +34,32 @@
             margin-bottom: 20px;
         }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            margin-bottom: 20px;
-            background-color: #ddd;
-            padding: 4px;
-            border-radius: 6px;
-        }
-
-        .grid-item {
+        .img-wrapper {
             position: relative;
-            width: 120px;
-            height: 100px;
-            background-color: #fff;
-            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
             overflow: hidden;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #333;
+            max-width: 380px;
+            cursor: pointer;
         }
 
-        .grid-item img {
-            width: 360px;
-            height: 300px;
-            object-fit: cover;
+        #captcha-img, .success-view img {
+            width: 100%;
+            height: auto;
+            max-height: 280px;
+            display: block;
         }
 
-        /* Wycinki z obrazka 360x300 */
-        .item-0 img { margin-left: 0; margin-top: 0; }
-        .item-1 img { margin-left: -120px; margin-top: 0; }
-        .item-2 img { margin-left: -240px; margin-top: 0; }
-        .item-3 img { margin-left: 0; margin-top: -100px; }
-        .item-4 img { margin-left: -120px; margin-top: -100px; }
-        .item-5 img { margin-left: -240px; margin-top: -100px; }
-        .item-6 img { margin-left: 0; margin-top: -200px; }
-        .item-7 img { margin-left: -120px; margin-top: -200px; }
-        .item-8 img { margin-left: -240px; margin-top: -200px; }
-
-        .grid-item.selected::after {
-            content: '✓';
+        /* Styl kwadratu zaznaczenia */
+        #selection-box {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: #007bff;
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .grid-item.selected {
-            outline: 3px solid #007bff;
+            border: 2px solid #0056b3;
+            background: rgba(0, 86, 179, 0.2);
+            pointer-events: none;
+            display: none;
+            border-radius: 3px;
         }
 
         .footer-note {
@@ -122,102 +87,9 @@
         .success-view {
             display: none;
         }
-        
-        .success-view img {
-            width: 100%;
-            max-height: 280px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body>
 
 <div class="captcha-container" id="captcha-view">
-    <h2>Zabezpieczenie przed botami</h2>
-    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>postać</strong>.</p>
-
-    <div class="grid-container" id="captcha-grid">
-        <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-1" onclick="toggleSelection(1)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-2" onclick="toggleSelection(2)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-3" onclick="toggleSelection(3)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-4" onclick="toggleSelection(4)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-5" onclick="toggleSelection(5)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-6" onclick="toggleSelection(6)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-7" onclick="toggleSelection(7)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-8" onclick="toggleSelection(8)"><img src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Kafelek"></div>
-    </div>
-
-    <br>
-    <button class="btn" onclick="verifySelection()">Zweryfikuj</button>
-    
-    <div class="footer-note">Weryfikacja CAPTCHA Powered by JustAndrew</div>
-</div>
-
-<div class="captcha-container success-view" id="success-view">
-    <h2>Weryfikacja zakończona sukcesem!</h2>
-    <p>Dziękujemy, oto właściwy widok:</p>
-    
-    <img src="https://i.ibb.co/C0V4q0q/andrew2.jpg" alt="Drugi etap">
-    
-    <br>
-    <button class="btn" onclick="resetCaptcha()">Zresetuj</button>
-</div>
-
-<script>
-    const correctTiles = [3, 4, 6, 7];
-    let selectedTiles = new Set();
-
-    function toggleSelection(index) {
-        const gridItems = document.querySelectorAll('.grid-item');
-        const item = gridItems[index];
-
-        if (selectedTiles.has(index)) {
-            selectedTiles.delete(index);
-            item.classList.remove('selected');
-        } else {
-            selectedTiles.add(index);
-            item.classList.add('selected');
-        }
-    }
-
-    function verifySelection() {
-        if (selectedTiles.size !== correctTiles.length) {
-            alert('Zaznacz poprawną liczbę elementów.');
-            return;
-        }
-
-        let isCorrect = true;
-        for (let tile of correctTiles) {
-            if (!selectedTiles.has(tile)) {
-                isCorrect = false;
-                break;
-            }
-        }
-
-        if (isCorrect) {
-            document.getElementById('captcha-view').style.display = 'none';
-            document.getElementById('success-view').style.display = 'block';
-        } else {
-            alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
-            resetCaptchaSelection();
-        }
-    }
-
-    function resetCaptchaSelection() {
-        selectedTiles.clear();
-        document.querySelectorAll('.grid-item').forEach(item => {
-            item.classList.remove('selected');
-        });
-    }
-
-    function resetCaptcha() {
-        document.getElementById('success-view').style.display = 'none';
-        document.getElementById('captcha-view').style.display = 'block';
-        resetCaptchaSelection();
-    }
-</script>
-
-</body>
-</html>
+    <h2>Zabezpieczenie przed botamihttp://googleusercontent.com/image_generation_content/0
