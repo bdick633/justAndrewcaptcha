@@ -37,81 +37,83 @@
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
+            gap: 1px;
             margin-bottom: 20px;
-            background-color: #ddd;
-            padding: 4px;
-            border-radius: 6px;
+            background-color: #bbb;
+            padding: 1px;
+            border-radius: 4px;
         }
 
         .grid-item {
             position: relative;
-            width: 120px;
-            height: 100px;
+            width: 124px;
+            height: 90px;
             background-color: #fff;
             cursor: pointer;
             overflow: hidden;
-            border-radius: 2px;
+            border-radius: 1px;
         }
 
         .grid-item img {
-            width: 360px;
-            height: 300px;
+            width: 372px;
+            height: 270px;
             object-fit: cover;
         }
 
-        /* Wycinki z Twojego pliku graficznego */
+        /* Wycinki z Twojego pliku .png */
         .item-0 img { margin-left: 0; margin-top: 0; }
-        .item-1 img { margin-left: -120px; margin-top: 0; }
-        .item-2 img { margin-left: -240px; margin-top: 0; }
-        .item-3 img { margin-left: 0; margin-top: -100px; }
-        .item-4 img { margin-left: -120px; margin-top: -100px; }
-        .item-5 img { margin-left: -240px; margin-top: -100px; }
-        .item-6 img { margin-left: 0; margin-top: -200px; }
-        .item-7 img { margin-left: -120px; margin-top: -200px; }
-        .item-8 img { margin-left: -240px; margin-top: -200px; }
+        .item-1 img { margin-left: -124px; margin-top: 0; }
+        .item-2 img { margin-left: -248px; margin-top: 0; }
+        .item-3 img { margin-left: 0; margin-top: -90px; }
+        .item-4 img { margin-left: -124px; margin-top: -90px; }
+        .item-5 img { margin-left: -248px; margin-top: -90px; }
+        .item-6 img { margin-left: 0; margin-top: -180px; }
+        .item-7 img { margin-left: -124px; margin-top: -180px; }
+        .item-8 img { margin-left: -248px; margin-top: -180px; }
 
         .grid-item.selected::after {
             content: '✓';
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: #007bff;
+            top: 4px;
+            right: 4px;
+            background-color: #1a73e8;
             color: white;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
         }
 
         .grid-item.selected {
-            outline: 3px solid #007bff;
+            outline: 2px solid #1a73e8;
+            z-index: 10;
         }
 
         .footer-note {
-            font-size: 0.85em;
+            font-size: 0.80em;
             color: #888;
             margin-top: 15px;
         }
 
         .btn {
-            background-color: #007bff;
+            background-color: #1a73e8;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 10px 24px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 1em;
+            font-weight: 500;
             transition: background-color 0.2s;
             margin-top: 10px;
         }
 
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #155bb5;
         }
 
         .success-view {
@@ -130,9 +132,9 @@
 
 <div class="captcha-container" id="captcha-view">
     <h2>Zabezpieczenie przed botami</h2>
-    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>postać</strong>, a następnie kliknij przycisk.</p>
+    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>JustAndrew</strong>, a następnie kliknij przycisk.</p>
 
-    <div class="grid-container" id="captchagrid">
+    <div class="grid-container" id="captcha-grid">
         <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="andrew1.png" alt="Kafelek"></div>
         <div class="grid-item item-1" onclick="toggleSelection(1)"><img src="andrew1.png" alt="Kafelek"></div>
         <div class="grid-item item-2" onclick="toggleSelection(2)"><img src="andrew1.png" alt="Kafelek"></div>
@@ -150,7 +152,7 @@
     <div class="footer-note">Weryfikacja CAPTCHA Powered by JustAndrew</div>
 </div>
 
-<div class="captcha-container success-view" id="successview">
+<div class="captcha-container success-view" id="success-view">
     <h2>Weryfikacja zakończona sukcesem!</h2>
     <p>Dziękujemy, oto właściwy widok:</p>
     
@@ -161,8 +163,8 @@
 </div>
 
 <script>
-    // Prawidłowe kafelki (indeksy: 0-8)
-    const correctTiles = [3, 4, 6, 7];
+    // Poprawnie zaznaczone kafelki (3 elementy na górze po prawej / na środku po lewej, zgodnie z Twoim zrzutem)
+    const correctTiles = [0, 1, 2]; 
     let selectedTiles = new Set();
 
     function toggleSelection(index) {
@@ -193,8 +195,8 @@
         }
 
         if (isCorrect) {
-            document.getElementById('captchaview').style.display = 'none';
-            document.getElementById('successview').style.display = 'block';
+            document.getElementById('captcha-view').style.display = 'none';
+            document.getElementById('success-view').style.display = 'block';
         } else {
             alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
             resetCaptchaSelection();
@@ -209,8 +211,8 @@
     }
 
     function resetCaptcha() {
-        document.getElementById('successview').style.display = 'none';
-        document.getElementById('captchaview').style.display = 'block';
+        document.getElementById('success-view').style.display = 'none';
+        document.getElementById('captcha-view').style.display = 'block';
         resetCaptchaSelection();
     }
 </script>
