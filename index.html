@@ -34,32 +34,62 @@
             margin-bottom: 20px;
         }
 
-        .img-wrapper {
-            position: relative;
-            display: inline-block;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
             margin-bottom: 20px;
-            border: 2px solid #ddd;
+            background-color: #ddd;
+            padding: 4px;
             border-radius: 6px;
-            overflow: hidden;
-            max-width: 380px;
+        }
+
+        .grid-item {
+            position: relative;
+            width: 120px;
+            height: 100px;
+            background-color: #fff;
             cursor: pointer;
+            overflow: hidden;
+            border-radius: 2px;
         }
 
-        #captcha-img, .success-view img {
-            width: 100%;
-            height: auto;
-            max-height: 280px;
-            display: block;
+        .grid-item img {
+            width: 360px;
+            height: 300px;
+            object-fit: cover;
         }
 
-        /* Styl kwadratu zaznaczenia */
-        #selection-box {
+        /* Wycinki z Twojego pliku graficznego */
+        .item-0 img { margin-left: 0; margin-top: 0; }
+        .item-1 img { margin-left: -120px; margin-top: 0; }
+        .item-2 img { margin-left: -240px; margin-top: 0; }
+        .item-3 img { margin-left: 0; margin-top: -100px; }
+        .item-4 img { margin-left: -120px; margin-top: -100px; }
+        .item-5 img { margin-left: -240px; margin-top: -100px; }
+        .item-6 img { margin-left: 0; margin-top: -200px; }
+        .item-7 img { margin-left: -120px; margin-top: -200px; }
+        .item-8 img { margin-left: -240px; margin-top: -200px; }
+
+        .grid-item.selected::after {
+            content: '✓';
             position: absolute;
-            border: 2px solid #0056b3;
-            background: rgba(0, 86, 179, 0.2);
-            pointer-events: none;
-            display: none;
-            border-radius: 3px;
+            top: 5px;
+            right: 5px;
+            background-color: #007bff;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .grid-item.selected {
+            outline: 3px solid #007bff;
         }
 
         .footer-note {
@@ -87,9 +117,103 @@
         .success-view {
             display: none;
         }
+        
+        .success-view img {
+            width: 100%;
+            max-height: 280px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
 
 <div class="captcha-container" id="captcha-view">
-    <h2>Zabezpieczenie przed botamihttp://googleusercontent.com/image_generation_content/0
+    <h2>Zabezpieczenie przed botami</h2>
+    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>postać</strong>, a następnie kliknij przycisk.</p>
+
+    <div class="grid-container" id="captchagrid">
+        <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-1" onclick="toggleSelection(1)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-2" onclick="toggleSelection(2)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-3" onclick="toggleSelection(3)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-4" onclick="toggleSelection(4)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-5" onclick="toggleSelection(5)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-6" onclick="toggleSelection(6)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-7" onclick="toggleSelection(7)"><img src="andrew1.png" alt="Kafelek"></div>
+        <div class="grid-item item-8" onclick="toggleSelection(8)"><img src="andrew1.png" alt="Kafelek"></div>
+    </div>
+
+    <br>
+    <button class="btn" onclick="verifySelection()">Zweryfikuj</button>
+    
+    <div class="footer-note">Weryfikacja CAPTCHA Powered by JustAndrew</div>
+</div>
+
+<div class="captcha-container success-view" id="successview">
+    <h2>Weryfikacja zakończona sukcesem!</h2>
+    <p>Dziękujemy, oto właściwy widok:</p>
+    
+    <img src="andrew2.jpg" alt="Drugi etap">
+    
+    <br>
+    <button class="btn" onclick="resetCaptcha()">Zresetuj</button>
+</div>
+
+<script>
+    // Prawidłowe kafelki (indeksy: 0-8)
+    const correctTiles = [3, 4, 6, 7];
+    let selectedTiles = new Set();
+
+    function toggleSelection(index) {
+        const gridItems = document.querySelectorAll('.grid-item');
+        const item = gridItems[index];
+
+        if (selectedTiles.has(index)) {
+            selectedTiles.delete(index);
+            item.classList.remove('selected');
+        } else {
+            selectedTiles.add(index);
+            item.classList.add('selected');
+        }
+    }
+
+    function verifySelection() {
+        if (selectedTiles.size !== correctTiles.length) {
+            alert('Zaznacz poprawną liczbę elementów.');
+            return;
+        }
+
+        let isCorrect = true;
+        for (let tile of correctTiles) {
+            if (!selectedTiles.has(tile)) {
+                isCorrect = false;
+                break;
+            }
+        }
+
+        if (isCorrect) {
+            document.getElementById('captchaview').style.display = 'none';
+            document.getElementById('successview').style.display = 'block';
+        } else {
+            alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
+            resetCaptchaSelection();
+        }
+    }
+
+    function resetCaptchaSelection() {
+        selectedTiles.clear();
+        document.querySelectorAll('.grid-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+    }
+
+    function resetCaptcha() {
+        document.getElementById('successview').style.display = 'none';
+        document.getElementById('captchaview').style.display = 'block';
+        resetCaptchaSelection();
+    }
+</script>
+
+</body>
+</html>
