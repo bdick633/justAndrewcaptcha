@@ -34,30 +34,62 @@
             margin-bottom: 20px;
         }
 
-        .img-wrapper {
-            position: relative;
-            display: inline-block;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
             margin-bottom: 20px;
-            border: 2px solid #ddd;
+            background-color: #ddd;
+            padding: 4px;
             border-radius: 6px;
+        }
+
+        .grid-item {
+            position: relative;
+            width: 120px;
+            height: 100px;
+            background-color: #fff;
+            cursor: pointer;
             overflow: hidden;
-            width: 350px;
-            height: 250px;
+            border-radius: 2px;
         }
 
-        #captcha-img, .success-view img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            cursor: crosshair;
+        .grid-item img {
+            width: 360px;
+            height: 300px;
+            object-fit: cover;
         }
 
-        #selection-box {
+        /* Przesunięcia tła, aby zasymulować kafelki */
+        .item-0 img { margin-left: 0; margin-top: 0; }
+        .item-1 img { margin-left: -120px; margin-top: 0; }
+        .item-2 img { margin-left: -240px; margin-top: 0; }
+        .item-3 img { margin-left: 0; margin-top: -100px; }
+        .item-4 img { margin-left: -120px; margin-top: -100px; }
+        .item-5 img { margin-left: -240px; margin-top: -100px; }
+        .item-6 img { margin-left: 0; margin-top: -200px; }
+        .item-7 img { margin-left: -120px; margin-top: -200px; }
+        .item-8 img { margin-left: -240px; margin-top: -200px; }
+
+        .grid-item.selected::after {
+            content: '✓';
             position: absolute;
-            border: 2px solid #0056b3;
-            background: rgba(0, 86, 179, 0.2);
-            pointer-events: none;
-            display: none;
+            top: 5px;
+            right: 5px;
+            background-color: #007bff;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .grid-item.selected {
+            outline: 3px solid #007bff;
         }
 
         .footer-note {
@@ -85,17 +117,30 @@
         .success-view {
             display: none;
         }
+        
+        .success-view img {
+            width: 100%;
+            max-height: 280px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
 
 <div class="captcha-container" id="captcha-view">
     <h2>Zabezpieczenie przed botami</h2>
-    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>JustAndrew</strong>, a następnie kliknij przycisk.</p>
+    <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>postać</strong>.</p>
 
-    <div class="img-wrapper" id="img-wrapper">
-        <img id="captcha-img" src="https://i.ibb.co/3ykG4g5/andrew1.jpg" alt="Obrazek weryfikacyjny" onclick="handleImageClick(event)">
-        <div id="selection-box"></div>
+    <div class="grid-container" id="captcha-grid">
+        <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-1" onclick="toggleSelection(1)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-2" onclick="toggleSelection(2)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-3" onclick="toggleSelection(3)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-4" onclick="toggleSelection(4)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-5" onclick="toggleSelection(5)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-6" onclick="toggleSelection(6)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-7" onclick="toggleSelection(7)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-8" onclick="toggleSelection(8)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
     </div>
 
     <br>
@@ -108,60 +153,64 @@
     <h2>Weryfikacja zakończona sukcesem!</h2>
     <p>Dziękujemy, oto właściwy widok:</p>
     
-    <div class="img-wrapper">
-        <img src="https://i.ibb.co/C0V4q0q/andrew2.jpg" alt="Drugi etap">
-    </div>
+    <img src="https://images2.imgbox.com/d7/0f/2C0X3R1N_o.jpg" alt="Drugi etap">
     
+    <br>
     <button class="btn" onclick="resetCaptcha()">Zresetuj</button>
 </div>
 
 <script>
-    let clickConfirmed = false;
+    // Prawidłowe kafelki, na których widać postać: środkowe i dolne (indeksy 3, 4, 6, 7)
+    const correctTiles = [3, 4, 6, 7];
+    let selectedTiles = new Set();
 
-    function handleImageClick(event) {
-        const img = document.getElementById('captcha-img');
-        const rect = img.getBoundingClientRect();
-        
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        
-        const selection = document.getElementById('selection-box');
-        selection.style.left = (x - 25) + 'px';
-        selection.style.top = (y - 25) + 'px';
-        selection.style.width = '50px';
-        selection.style.height = '50px';
-        selection.style.display = 'block';
+    function toggleSelection(index) {
+        const gridItems = document.querySelectorAll('.grid-item');
+        const item = gridItems[index];
 
-        const percentageX = (x / rect.width) * 100;
-        const percentageY = (y / rect.height) * 100;
-
-        // Obszar na którym znajduje się postać (głowa) na zdjęciu 1
-        if (percentageX >= 30 && percentageX <= 48 && percentageY >= 58 && percentageY <= 75) {
-            clickConfirmed = true;
+        if (selectedTiles.has(index)) {
+            selectedTiles.delete(index);
+            item.classList.remove('selected');
         } else {
-            clickConfirmed = false;
+            selectedTiles.add(index);
+            item.classList.add('selected');
         }
     }
 
     function verifySelection() {
-        if (clickConfirmed) {
+        if (selectedTiles.size !== correctTiles.length) {
+            alert('Zaznacz poprawną liczbę elementów.');
+            return;
+        }
+
+        let isCorrect = true;
+        for (let tile of correctTiles) {
+            if (!selectedTiles.has(tile)) {
+                isCorrect = false;
+                break;
+            }
+        }
+
+        if (isCorrect) {
             document.getElementById('captcha-view').style.display = 'none';
             document.getElementById('success-view').style.display = 'block';
         } else {
             alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
-            resetSelection();
+            resetCaptchaSelection();
         }
     }
 
-    function resetSelection() {
-        document.getElementById('selection-box').style.display = 'none';
-        clickConfirmed = false;
+    function resetCaptchaSelection() {
+        selectedTiles.clear();
+        document.querySelectorAll('.grid-item').forEach(item => {
+            item.classList.remove('selected');
+        });
     }
 
     function resetCaptcha() {
         document.getElementById('success-view').style.display = 'none';
         document.getElementById('captcha-view').style.display = 'block';
-        resetSelection();
+        resetCaptchaSelection();
     }
 </script>
 
