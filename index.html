@@ -60,7 +60,7 @@
             object-fit: cover;
         }
 
-        /* Przesunięcia tła, aby zasymulować kafelki */
+        /* Wycinki z pliku andrew1.jpg */
         .item-0 img { margin-left: 0; margin-top: 0; }
         .item-1 img { margin-left: -120px; margin-top: 0; }
         .item-2 img { margin-left: -240px; margin-top: 0; }
@@ -122,6 +122,7 @@
             width: 100%;
             max-height: 280px;
             border-radius: 6px;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -132,15 +133,15 @@
     <p>Zaznacz wszystkie kwadraty, na których znajduje się <strong>postać</strong>.</p>
 
     <div class="grid-container" id="captcha-grid">
-        <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-1" onclick="toggleSelection(1)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-2" onclick="toggleSelection(2)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-3" onclick="toggleSelection(3)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-4" onclick="toggleSelection(4)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-5" onclick="toggleSelection(5)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-6" onclick="toggleSelection(6)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-7" onclick="toggleSelection(7)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
-        <div class="grid-item item-8" onclick="toggleSelection(8)"><img src="https://images2.imgbox.com/f9/57/2q6hV3l9_o.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-1" onclick="toggleSelection(1)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-2" onclick="toggleSelection(2)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-3" onclick="toggleSelection(3)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-4" onclick="toggleSelection(4)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-5" onclick="toggleSelection(5)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-6" onclick="toggleSelection(6)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-7" onclick="toggleSelection(7)"><img src="andrew1.jpg" alt="Kafelek"></div>
+        <div class="grid-item item-8" onclick="toggleSelection(8)"><img src="andrew1.jpg" alt="Kafelek"></div>
     </div>
 
     <br>
@@ -153,14 +154,14 @@
     <h2>Weryfikacja zakończona sukcesem!</h2>
     <p>Dziękujemy, oto właściwy widok:</p>
     
-    <img src="https://images2.imgbox.com/d7/0f/2C0X3R1N_o.jpg" alt="Drugi etap">
+    <img src="andrew2.jpg" alt="Drugi etap">
     
     <br>
     <button class="btn" onclick="resetCaptcha()">Zresetuj</button>
 </div>
 
 <script>
-    // Prawidłowe kafelki, na których widać postać: środkowe i dolne (indeksy 3, 4, 6, 7)
+    // Prawidłowe kafelki dla wycinka (środkowe i dolne, indeksy 3, 4, 6, 7)
     const correctTiles = [3, 4, 6, 7];
     let selectedTiles = new Set();
 
