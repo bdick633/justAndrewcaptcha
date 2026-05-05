@@ -60,7 +60,7 @@
             object-fit: cover;
         }
 
-        /* Wycinki z Twojego pliku .png */
+        /* Wycinki z pliku andrew1.png */
         .item-0 img { margin-left: 0; margin-top: 0; }
         .item-1 img { margin-left: -124px; margin-top: 0; }
         .item-2 img { margin-left: -248px; margin-top: 0; }
@@ -163,8 +163,8 @@
 </div>
 
 <script>
-    // Poprawnie zaznaczone kafelki (3 elementy na górze po prawej / na środku po lewej, zgodnie z Twoim zrzutem)
-    const correctTiles = [0, 1, 2]; 
+    // Poprawne kafelki (0, 1, 2 odpowiadające górnemu wierszowi ze zdjęcia)
+    const correctTiles = [0, 1, 2];
     let selectedTiles = new Set();
 
     function toggleSelection(index) {
