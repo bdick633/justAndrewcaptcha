@@ -70,7 +70,7 @@
             object-fit: cover;
         }
 
-        /* Wycinki z Twojego pliku graficznego andrew1.png */
+        /* Wycinki z andrew1.png */
         .item-0 img { margin-left: 0; margin-top: 0; }
         .item-1 img { margin-left: -116px; margin-top: 0; }
         .item-2 img { margin-left: -232px; margin-top: 0; }
@@ -220,7 +220,7 @@
         }
 
         if (isCorrect) {
-            document.getElementById('captchaview').style.display = 'none';
+            document.getElementById('captcha-view').style.display = 'none';
             document.getElementById('success-view').style.display = 'block';
         } else {
             alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
@@ -237,7 +237,7 @@
 
     function resetCaptcha() {
         document.getElementById('success-view').style.display = 'none';
-        document.getElementById('captchaview').style.display = 'block';
+        document.getElementById('captcha-view').style.display = 'block';
         resetCaptchaSelection();
     }
 </script>
