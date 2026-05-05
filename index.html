@@ -70,7 +70,7 @@
             object-fit: cover;
         }
 
-        /* Wycinki z pliku andrew1.png */
+        /* Wycinki z Twojego pliku graficznego andrew1.png */
         .item-0 img { margin-left: 0; margin-top: 0; }
         .item-1 img { margin-left: -116px; margin-top: 0; }
         .item-2 img { margin-left: -232px; margin-top: 0; }
@@ -157,9 +157,8 @@
 <div class="captcha-container" id="captcha-view">
     <div class="header-box">
         <h2>Wybierz wszystkie kwadraty z</h2>
-        <p>przejściami dla pieszych</p> </div>
-    
-    <p style="text-align: left; font-size: 0.85em; color: #333; margin-top: -5px; margin-bottom: 15px;">Wybierz wszystkie kwadraty z <strong>JustAndrew</strong>.</p>
+        <p>JustAndrew</p>
+    </div>
 
     <div class="grid-container" id="captcha-grid">
         <div class="grid-item item-0" onclick="toggleSelection(0)"><img src="andrew1.png" alt="Kafelek"></div>
@@ -182,9 +181,9 @@
 <div class="captcha-container success-view" id="success-view">
     <h2>Weryfikacja zakończona sukcesem!</h2>
     <p>Dziękujemy, oto właściwy widok:</p>
-    
+
     <img src="andrew2.jpg" alt="Drugi etap">
-    
+
     <br>
     <button class="btn" onclick="resetCaptcha()" style="float: none; margin-top: 15px;">Zresetuj</button>
 </div>
@@ -221,7 +220,7 @@
         }
 
         if (isCorrect) {
-            document.getElementById('captcha-view').style.display = 'none';
+            document.getElementById('captchaview').style.display = 'none';
             document.getElementById('success-view').style.display = 'block';
         } else {
             alert('Niepoprawne zaznaczenie. Spróbuj ponownie.');
@@ -238,7 +237,7 @@
 
     function resetCaptcha() {
         document.getElementById('success-view').style.display = 'none';
-        document.getElementById('captcha-view').style.display = 'block';
+        document.getElementById('captchaview').style.display = 'block';
         resetCaptchaSelection();
     }
 </script>
